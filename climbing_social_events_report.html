@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>攀岩馆社交趣味活动全球情报报告</title>
+<style>
+  :root {
+    --bg: #0d0d14;
+    --card: #14141f;
+    --card2: #1a1a2a;
+    --border: #2a2a40;
+    --accent1: #7c5cfc;
+    --accent2: #fc5c7d;
+    --accent3: #5cfcb8;
+    --accent4: #fcb75c;
+    --accent5: #5cb8fc;
+    --text: #e0e0f0;
+    --muted: #888aaa;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; line-height: 1.7; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, #0d0d14 0%, #1a0d2e 50%, #0d1a1f 100%); padding: 52px 32px 40px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  .hero::before { content: '🧗'; position: absolute; right: 40px; top: 20px; font-size: 100px; opacity: 0.08; }
+  .hero h1 { font-size: 1.9rem; font-weight: 800; background: linear-gradient(90deg, #a78bfa, #f472b6, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+  .hero p { color: var(--muted); font-size: 0.9rem; max-width: 640px; }
+  .hero-meta { margin-top: 18px; display: flex; gap: 20px; flex-wrap: wrap; }
+  .hero-tag { background: var(--card2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 0.75rem; color: var(--muted); }
+
+  /* NAV */
+  .nav { display: flex; gap: 0; border-bottom: 1px solid var(--border); background: var(--card); overflow-x: auto; }
+  .nav-item { padding: 14px 22px; font-size: 0.82rem; cursor: pointer; white-space: nowrap; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .nav-item:hover { color: var(--text); background: var(--card2); }
+  .nav-item.active { color: #fff; border-bottom-color: var(--accent1); font-weight: 600; }
+
+  /* MAIN */
+  .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* GRID */
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)); gap: 20px; }
+  @media(max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* CARD */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; position: relative; overflow: hidden; transition: border-color 0.2s; }
+  .card:hover { border-color: #3a3a58; }
+  .card-accent { position: absolute; top: 0; left: 0; width: 4px; height: 100%; border-radius: 16px 0 0 16px; }
+
+  /* LABELS */
+  .label-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+  .region { padding: 3px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; }
+  .region-cn { background: #2a1010; color: #fc8a8a; border: 1px solid #4a2020; }
+  .region-us { background: #101a2a; color: #8ab4fc; border: 1px solid #203060; }
+  .region-sg { background: #102a1a; color: #8afcb4; border: 1px solid #20603a; }
+  .region-eu { background: #2a2010; color: #fccc8a; border: 1px solid #4a4020; }
+  .region-global { background: #1a1028; color: #c4a0fc; border: 1px solid #382060; }
+  .category { padding: 3px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; }
+  .cat-party { background: #280a28; color: #f472b6; border: 1px solid #500a50; }
+  .cat-league { background: #0a1a28; color: #60c4fc; border: 1px solid #0a3060; }
+  .cat-community { background: #0a2818; color: #34d399; border: 1px solid #0a5030; }
+  .cat-collab { background: #28200a; color: #fbbf24; border: 1px solid #504010; }
+  .cat-social { background: #200a28; color: #a78bfa; border: 1px solid #401060; }
+  .cat-fitness { background: #1a100a; color: #fb923c; border: 1px solid #503010; }
+
+  /* CARD CONTENT */
+  .card h3 { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .card .gym { font-size: 0.78rem; color: var(--muted); margin-bottom: 10px; }
+  .gym strong { color: #b0b4d8; }
+  .card-body { font-size: 0.83rem; color: #b8b8d0; line-height: 1.7; }
+  .card-body b { color: #e0e0f0; }
+
+  /* WHY BOX */
+  .why-box { background: var(--card2); border-radius: 8px; padding: 10px 14px; margin-top: 12px; font-size: 0.78rem; color: #a0a0c0; border-left: 3px solid var(--accent1); }
+  .why-box strong { color: #c4b8fc; }
+
+  /* SOURCE */
+  .source { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .source-label { font-size: 0.68rem; color: #666880; margin-bottom: 4px; }
+  .source a { font-size: 0.72rem; color: #6080cc; text-decoration: none; word-break: break-all; display: block; line-height: 1.5; }
+  .source a:hover { color: #8ab4ff; text-decoration: underline; }
+
+  /* SECTION HEADER */
+  .sec-head { margin-bottom: 24px; }
+  .sec-head h2 { font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+  .sec-head p { font-size: 0.84rem; color: var(--muted); max-width: 700px; }
+
+  /* INSIGHT BOXES */
+  .insight-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .insight { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .insight-icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .insight h4 { font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .insight p { font-size: 0.8rem; color: var(--muted); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+  /* QUOTE */
+  .quote { background: linear-gradient(135deg, #1a1030, #101a30); border-radius: 12px; padding: 18px 20px; margin: 16px 0; border-left: 4px solid var(--accent1); }
+  .quote p { font-size: 0.85rem; color: #c0c0e0; font-style: italic; }
+  .quote cite { font-size: 0.72rem; color: var(--muted); margin-top: 6px; display: block; }
+
+  /* FULL WIDTH CARD */
+  .card-full { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+  .card-full h3 { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  th { background: var(--card2); padding: 10px 14px; text-align: left; color: var(--muted); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.5px; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: #b8b8d0; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  /* SCROLL TOP */
+  .back-top { text-align: center; padding: 32px; color: var(--muted); font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🧗 攀岩馆社交趣味活动 · 全球情报报告</h1>
+  <p>深度收集中国、美国、新加坡、欧洲各大岩馆最具社交属性、趣味性最强的活动类型与真实案例，所有数据均有原始来源。</p>
+  <div class="hero-meta">
+    <span class="hero-tag">📅 整理于 2026年4月</span>
+    <span class="hero-tag">🌏 覆盖中国 / 美国 / 新加坡 / 全球</span>
+    <span class="hero-tag">📌 全部来源可核实</span>
+    <span class="hero-tag">🔥 社交属性 × 趣味性 双维度分析</span>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-item active" onclick="showTab('theme')">🎨 主题派对夜</div>
+  <div class="nav-item" onclick="showTab('league')">🏆 团队联赛</div>
+  <div class="nav-item" onclick="showTab('community')">🤝 社群专属夜</div>
+  <div class="nav-item" onclick="showTab('collab')">🎵 跨界联名</div>
+  <div class="nav-item" onclick="showTab('china')">🇨🇳 中国特色</div>
+  <div class="nav-item" onclick="showTab('insight')">💡 趋势洞察</div>
+</div>
+
+<div class="main">
+
+<!-- ==================== 主题派对夜 ==================== -->
+<div class="section active" id="theme">
+  <div class="sec-head">
+    <h2>🎨 主题派对夜 — 最高社交密度的活动形式</h2>
+    <p>把攀岩馆变成派对场地，服装、灯光、音乐三合一。这类活动吸引非攀岩者前来"打卡"，是破圈引流效果最强的活动类型。</p>
+  </div>
+
+  <div class="grid2">
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#a78bfa,#f472b6)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·科罗拉多</span>
+        <span class="category cat-party">荧光派对赛</span>
+      </div>
+      <h3>Psychedelia — 年度黑光主题抱石赛</h3>
+      <div class="gym"><strong>The Spot Climbing Gym</strong>｜Boulder, Colorado｜已举办10+ 届</div>
+      <div class="card-body">
+        攀岩圈最著名的年度主题活动之一。<b>黑光灯全馆亮起</b>，路线用荧光胶带重新包装，参赛者须身着与年度主题吻合的服装（2025年主题：「深海深渊 Undersea Abyss」）。<br><br>
+        活动包含：<b>服装大赛</b>（冠军赢取品牌大奖）+ <b>抱石比赛</b>（全级别）+ <b>摊位市集</b> + <b>现场美食饮品</b> + <b>品牌抽奖</b>。<br><br>
+        2025年共吸引<b>数百名参赛者</b>将馆塞满，活动门票已售罄。下届 Psychedelia 将于 <b>2026年10月</b>回归。
+      </div>
+      <div class="why-box"><strong>💡 为什么这个活动社交属性强？</strong> 服装是天然破冰道具，陌生人因"夸对方的造型"自然开启对话；荧光环境降低了被注视的焦虑，人们更愿意大胆互动。</div>
+      <div class="source">
+        <div class="source-label">📡 来源（真实网址）</div>
+        <a href="https://www.thespotgym.com/events/psychedelia/" target="_blank">thespotgym.com/events/psychedelia</a>
+        <a href="https://www.thespotgym.com/news/gallery-psychedelia-2025/" target="_blank">thespotgym.com — Psychedelia 2025 图集</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#60c4fc,#a78bfa)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·西雅图</span>
+        <span class="category cat-party">黑光抱石赛</span>
+      </div>
+      <h3>Black Light Bouldering (BLB) — 黑光抱石比赛</h3>
+      <div class="gym"><strong>Edgeworks Climbing</strong>｜Tacoma / Seattle, Washington</div>
+      <div class="card-body">
+        每年万圣节前后举行，全馆布置成<b>荧光艺术装置</b>——路线员与志愿者合力用荧光胶带将岩壁绘制成视觉奇观。<br><br>
+        特色：<b>DJ 现场打碟</b>、专属纪念 T 恤（限量预购，会在黑光下发光）、品牌赞助大礼包抽奖。路线专为本场赛事特别设计，难度覆盖全级别。<br><br>
+        早鸟票 $35（会员）/ $45（社区），现场票 $60。参赛者反馈这是<b>"一年中最期待的夜晚之一"</b>。
+      </div>
+      <div class="why-box"><strong>💡 关键设计：</strong>志愿者参与制作荧光装置，让参与者提前建立归属感；限量 T 恤制造稀缺感和"我到过这里"的身份标签。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://edgeworksclimbing.com/blog/black-light-bouldering-2023/" target="_blank">edgeworksclimbing.com — Black Light Bouldering 详情</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#fbbf24,#f472b6)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·大急流城</span>
+        <span class="category cat-party">万圣节主题赛</span>
+      </div>
+      <h3>Creep Comp — 万圣节服装抱石赛</h3>
+      <div class="gym"><strong>Terra Firma Bouldering Co.</strong>｜Grand Rapids, Michigan</div>
+      <div class="card-body">
+        每年10月25日前后举行的<b>万圣节主题抱石比赛</b>。参赛者穿着鬼怪或搞笑服装上墙，评委同时打分攀爬成绩与服装创意度。<br><br>
+        口号：<b>"爬上排行榜，或者就享受鬼怪乐趣"</b>。没有攀岩经验的人也被鼓励参加，因为服装分本身就是得分项目。
+      </div>
+      <div class="why-box"><strong>💡 破圈设计：</strong>非攀岩者也能凭服装获奖，降低参与门槛，同时制造"今晚谁的服装最猛"这一公共话题，整晚都有聊不完的天。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.climbterrafirma.com/events-calendar" target="_blank">climbterrafirma.com/events-calendar</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#34d399,#60c4fc)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·土尔沙</span>
+        <span class="category cat-party">头灯夜攀</span>
+      </div>
+      <h3>Headlamp Night Climbing — 头灯夜攀派对</h3>
+      <div class="gym"><strong>Climb Tulsa</strong>｜Tulsa, Oklahoma</div>
+      <div class="card-body">
+        馆内关闭全部照明，<b>每位攀岩者必须佩戴头灯</b>才能进入攀岩区。黑暗中只有头灯光束在岩壁上移动，营造出极具仪式感的氛围。<br><br>
+        仅限会员参与，制造了<b>"专属俱乐部"</b>的归属感。配合<b>辣椒烹饪大赛</b>（Chili Cook-Off）在同期举行，爬完墙互相品尝对方带来的辣椒料理，胜者获得馆内积分奖励。
+      </div>
+      <div class="why-box"><strong>💡 趣味设计：</strong>头灯夜攀 + 烹饪大赛组合，把运动体验和饮食分享绑定，极大延长活动停留时间并促进社交互动。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://climbtulsa.com/calendar" target="_blank">climbtulsa.com/calendar</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#f472b6,#fb923c)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·波士顿/威斯康星</span>
+        <span class="category cat-party">Lights Out 黑光夜</span>
+      </div>
+      <h3>Lights Out Party — 黑光攀岩晚会</h3>
+      <div class="gym"><strong>Boulders Climbing Gym</strong>｜Madison, Wisconsin</div>
+      <div class="card-body">
+        定期举办的<b>黑光攀岩晚会</b>，黑光灯亮起，放着节拍强劲的音乐。着装建议：穿白色或荧光色服装，自带头灯效果更佳。<br><br>
+        会员免费参与，非会员购日票即可加入。活动还包括：<b>Boulders Brunch（早午餐聚会）、Game Night（游戏夜）、Boulders Recess（大人版课间休息）、Sauna & Cold Plunge（桑拿冷水浴社群体验）</b>等配套系列活动。
+      </div>
+      <div class="why-box"><strong>💡 系列化运营：</strong>把多种社交主题做成常态化系列，让成员永远有"下一次期待"，大幅提升会员粘性。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.bouldersgym.com/events" target="_blank">bouldersgym.com/events</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#34d399,#fbbf24)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·科罗拉多</span>
+        <span class="category cat-party">季节主题系列赛</span>
+      </div>
+      <h3>Spot Bouldering Series — 三场年度主题赛</h3>
+      <div class="gym"><strong>The Spot Climbing Gym</strong>｜Boulder / Golden / Denver, Colorado</div>
+      <div class="card-body">
+        一年三场各有独立主题的抱石赛系列：<br>
+        <b>① Psychedelia</b>（秋季·荧光/变装）<br>
+        <b>② Gold Rush</b>（春季·淘金热西部主题）<br>
+        <b>③ Winter Wonderland</b>（冬季·圣诞节冰雪主题）<br><br>
+        每场活动都有<b>专属服装主题、限定纪念品、品牌赞助大礼</b>。三场合计构成年度社群日历，常客形成稳定的"节日感"认同。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.thespotgym.com/spot-bouldering-series" target="_blank">thespotgym.com/spot-bouldering-series</a>
+        <a href="https://www.thespotgym.com/events/" target="_blank">thespotgym.com/events（含 Summer Jam, Welcome Back Bash）</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== 团队联赛 ==================== -->
+<div class="section" id="league">
+  <div class="sec-head">
+    <h2>🏆 团队联赛 — 持续数周的社交纽带</h2>
+    <p>抱石联赛是社交黏性最强的运营工具。参赛者以4人小队为单位，每周打分，持续4-6周，形成固定的"攀岩朋友圈"。</p>
+  </div>
+
+  <div class="grid2">
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#60c4fc,#a78bfa)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·洛杉矶</span>
+        <span class="category cat-league">4人团队联赛</span>
+      </div>
+      <h3>Playa Vista Bouldering League — 4人团队月赛</h3>
+      <div class="gym"><strong>Sender One Climbing</strong>｜Playa Vista, Los Angeles</div>
+      <div class="card-body">
+        4人小队，4周积分制联赛。亮点：<b>"自由球员"（Free Agent）机制</b>——没有队友的人也能报名，由馆方帮你组队，直接与陌生人成为队友。<br><br>
+        每周设置全新路线，团队可在一周内任意时段来攀爬积分，时间灵活。决赛夜（Finals Night）全队聚集，现场气氛最为热烈。<br>
+        早鸟价：$25/人 或 $100/队。
+      </div>
+      <div class="why-box"><strong>💡 Free Agent 机制是亮点：</strong>单身、新人或刚换城市的人最需要这种"官方帮你交朋友"的入口。直接解决"我没有攀岩朋友"的最大痛点。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.senderoneclimbing.com/playavista/" target="_blank">senderoneclimbing.com/playavista</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#fbbf24,#34d399)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·奥克拉荷马</span>
+        <span class="category cat-league">残障点数联赛</span>
+      </div>
+      <h3>Bouldering League — 残障点数团队赛</h3>
+      <div class="gym"><strong>Climb Tulsa</strong>｜Tulsa, Oklahoma</div>
+      <div class="card-body">
+        3-4人组队，6周联赛，完全<b>免费参与</b>（本届免费！）。最妙的设计是<b>残障点数（Handicap）系统</b>：每位选手根据自己的能力自定义基准难度，攀得比基准更难才能得分，且基准会随表现自动上调。<br><br>
+        这意味着：<b>V2 选手完全可以在积分榜上击败 V8 选手</b>。彻底消除水平差距带来的参与抑制，初学者和大神都有动力参与。
+      </div>
+      <div class="why-box"><strong>💡 核心设计哲学：</strong>「竞争不是拼天赋，是拼进步」。这让菜鸟不怯场，老鸟不懈怠，任何水平的人都有参与价值感。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://climbtulsa.com/calendar" target="_blank">climbtulsa.com/calendar</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#a78bfa,#60c4fc)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·西雅图</span>
+        <span class="category cat-league">6周跨馆积分赛</span>
+      </div>
+      <h3>Edgeworks Bouldering League — 跨馆团队联赛</h3>
+      <div class="gym"><strong>Edgeworks Climbing</strong>｜Seattle / Tacoma, Washington</div>
+      <div class="card-body">
+        6周制，每周路线员新设一批路线，周三下午6点"掉线"（路线设置帷幕落下），团队在接下来一周内任意时间来送（Send）。<br><br>
+        设有<b>Team Finder（找队员）表单</b>，一个人也能加入。前4名队伍晋级各馆的周5决赛，再争夺<b>Week 6大决赛</b>冠军席位。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://edgeworksclimbing.com/blog/category/competitions/" target="_blank">edgeworksclimbing.com — 联赛详情</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#f472b6,#fbbf24)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·纽约-宾州</span>
+        <span class="category cat-league">跨馆积分系列赛</span>
+      </div>
+      <h3>Nor'Easter Bouldering Series — 跨馆跨城积分系列</h3>
+      <div class="gym"><strong>Movement Gyms</strong>｜纽约 + 宾夕法尼亚（多馆联合）</div>
+      <div class="card-body">
+        纽约与宾州各大 Movement 岩馆联合举办的赛季积分系列。<b>参加越多场比赛，积分越多</b>，汇总排名越靠前。积分前列者受邀参加<b>2026年6月 Superfinals</b> 大决赛。<br><br>
+        已举行的站点：Harlem「Uptown Showdown Resurrection」(2025年11月15日)。跨馆机制让不同地区的攀岩圈子互相认识，横向扩大社群规模。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://movementgyms.com/lic/events/" target="_blank">movementgyms.com/lic/events</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#34d399,#60c4fc)"></div>
+      <div class="label-row">
+        <span class="region region-sg">🇸🇬 新加坡</span>
+        <span class="category cat-league">跨国跨馆联赛</span>
+      </div>
+      <h3>SEA Boulder League 2026 — 东南亚抱石联赛</h3>
+      <div class="gym"><strong>Boulder Planet</strong>｜新加坡 + 泰国 + 印度尼西亚</div>
+      <div class="card-body">
+        东南亚三国同步举行的抱石联赛。<b>新加坡 Sembawang 站</b>与泰国 Rangsit、印尼 Jakarta 联动，攀岩者可以在各地看到"国际对手"的积分，跨国竞争感极强。<br><br>
+        Boulder Planet 同时设有 <b>IVC 2026（Invitational Climbing Competition）</b>年度邀请赛，已在 Facebook 发布"IVC 2026 in 120 seconds"宣传内容，报名入口通过 Linktree 开放。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.seaclimbing.com/competition" target="_blank">seaclimbing.com/competition</a>
+        <a href="https://linktr.ee/boulderplanet.sg" target="_blank">linktr.ee/boulderplanet.sg（IVC 2026 报名）</a>
+        <a href="https://www.facebook.com/boulderplanet.sg/" target="_blank">facebook.com/boulderplanet.sg</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#fbbf24,#f472b6)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·科罗拉多</span>
+        <span class="category cat-league">女性/跨性别专属赛</span>
+      </div>
+      <h3>Death Moth — 专为女性/Trans/非二元性别的比赛</h3>
+      <div class="gym"><strong>The Spot Golden</strong>｜Golden, Colorado</div>
+      <div class="card-body">
+        这是一场<b>专门为女性、跨性别者、非二元性别及性别非常规（GNC）攀岩者</b>设计的抱石比赛。在一个传统由男性主导的运动空间里，专属赛制提供了<b>安全感和归属感</b>，让更多人愿意尝试比赛。
+      </div>
+      <div class="why-box"><strong>💡 社群营造逻辑：</strong>专属活动 → 让目标群体感到"这里是我的地方" → 口耳相传拉新 → 形成稳定次社群 → 提升整体馆的包容口碑。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.thespotgym.com/events/competitions/" target="_blank">thespotgym.com/events/competitions</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== 社群专属夜 ==================== -->
+<div class="section" id="community">
+  <div class="sec-head">
+    <h2>🤝 社群专属夜 — 让"特定人群"找到归属</h2>
+    <p>把馆内的某个夜晚"献给"特定社群，无论是新手、LGBTQ+、特定族裔还是上班族，专属夜的力量在于：让人感受到"这里有我的位置"。</p>
+  </div>
+
+  <div class="grid2">
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#a78bfa,#f472b6)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 多馆</span>
+        <span class="category cat-community">LGBTQ+ 专属夜</span>
+      </div>
+      <h3>Queer Climbing Social / Queer Crush — LGBTQ+ 定期聚攀</h3>
+      <div class="gym"><strong>Touchstone Climbing / Boulders Gym / Movement / Edgeworks</strong>｜美国各地</div>
+      <div class="card-body">
+        美国各大岩馆几乎均开设<b>每月1-2次的 LGBTQ+ 专属攀岩夜</b>，面向社群全水平开放。亮点：<br>
+        • Touchstone 的 <b>Queer Crush</b> 覆盖加州15+家分馆，有 Discord 频道、月报、NorCal/SoCal 分区日历<br>
+        • Movement 的 <b>CRUX Newbie Night</b>（每月第三个周五）专为 LGBTQ+ 新手设计，教基础技术 + 提供折扣票<br>
+        • Edgeworks 与 <b>Queer Mountaineers</b>（户外组织）合作，将室内和户外攀岩社群连接<br>
+        • Boulders Gym 的 QCS 还额外附设<b>技能课、引导讨论环节</b>
+      </div>
+      <div class="why-box"><strong>💡 为什么这类活动有强大增长力？</strong>攀岩本来被标签为「肌肉男运动」，专属夜直接瓦解这个刻板印象，口碑营销极强，每次活动都能带来新人。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://touchstoneclimbing.com/meetups/" target="_blank">touchstoneclimbing.com/meetups（Queer Crush 全馆列表）</a>
+        <a href="https://movementgyms.com/lic/events/" target="_blank">movementgyms.com/lic/events（CRUX Newbie Night）</a>
+        <a href="https://www.bouldersgym.com/queerclimbingsocial" target="_blank">bouldersgym.com/queerclimbingsocial</a>
+        <a href="https://edgeworksclimbing.com/blog/queer-climb-nights/" target="_blank">edgeworksclimbing.com — Queer Climb Nights</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#34d399,#fbbf24)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 多馆</span>
+        <span class="category cat-community">女性专属夜</span>
+      </div>
+      <h3>Ladies Night / She Crushes — 女性专属攀岩夜</h3>
+      <div class="gym"><strong>Terra Firma / Touchstone / Movement</strong>｜美国各地</div>
+      <div class="card-body">
+        Terra Firma 的 <b>Ladies Night</b> 设计非常细腻：活动协调员主持、<b>破冰环节（icebreaker）</b>、分享攀岩挑战与目标、非正式的互相加油文化。<br><br>
+        Touchstone 的系列名称充满个性：<b>She Crushes、Senderellas、Lady Crush Crew、Vertigals</b>……每家分馆有独立品牌名，却共享同一社群文化。<br><br>
+        活动面向所有水平，非会员亦以折扣票参与，强调<b>"爬到哪里不重要，你来了就对了"</b>。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.climbterrafirma.com/events-calendar" target="_blank">climbterrafirma.com — Ladies Night 详情</a>
+        <a href="https://touchstoneclimbing.com/meetups/" target="_blank">touchstoneclimbing.com/meetups（She Crushes 系列）</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#fb923c,#fbbf24)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 多馆</span>
+        <span class="category cat-community">族裔文化专属夜</span>
+      </div>
+      <h3>FilipinUp / Black Rocks / Escalemos — 族裔专属攀岩社群</h3>
+      <div class="gym"><strong>Touchstone Climbing / Sender One</strong>｜加州多馆</div>
+      <div class="card-body">
+        Touchstone 旗下有多个以族裔文化认同为核心的社群：<br>
+        • <b>FilipinUp</b> — 菲律宾裔社群，覆盖5家馆<br>
+        • <b>Black Rocks LA / Black Rock Collective</b> — 黑人攀岩者社群，专注"黑人快乐"文化<br>
+        • <b>Escalemos</b> — 拉丁裔社群，结合 Latino Outdoors 户外组织<br>
+        • Sender One 的 <b>Send With Color</b>（每月第二周四，7-9pm）— BIPOC 专属社交攀岩夜
+      </div>
+      <div class="why-box"><strong>💡 趋势洞察：</strong>当攀岩仍被视为"白人中产运动"的背景下，这类活动是最有力的多样性声明，同时制造强烈的社群认同感和媒体话题。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://touchstoneclimbing.com/meetups/" target="_blank">touchstoneclimbing.com/meetups（族裔社群全列表）</a>
+        <a href="https://www.senderoneclimbing.com/playavista/" target="_blank">senderoneclimbing.com — Send With Color</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#60c4fc,#34d399)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 纽约</span>
+        <span class="category cat-community">社群新手夜</span>
+      </div>
+      <h3>New Climber Social + Member Night — 新人破冰社交夜</h3>
+      <div class="gym"><strong>Boulders Climbing Gym / Movement LIC</strong>｜纽约</div>
+      <div class="card-body">
+        <b>每月最后一个周二，7pm-9pm</b>（Member Night）：会员免费入场，可携带一名客人，专门为"认识其他攀岩者"设计。<br><br>
+        <b>New Climber Social</b>：专为从未攀过岩或几乎没有经验的人设计的社交聚会，先学基础，再在社交氛围中尝试。包含折扣票 + 免费器材租借。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.bouldersgym.com/events" target="_blank">bouldersgym.com/events</a>
+        <a href="https://movementgyms.com/lic/events/" target="_blank">movementgyms.com/lic/events</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#a78bfa,#34d399)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国多地</span>
+        <span class="category cat-community">戒瘾康复社群</span>
+      </div>
+      <h3>The Phoenix x Terra Firma — 清醒社群攀岩夜</h3>
+      <div class="gym"><strong>Terra Firma Bouldering Co.</strong>｜Grand Rapids, Michigan</div>
+      <div class="card-body">
+        由戒瘾支持公益组织 <b>The Phoenix</b> 合作举办。唯一入场要求：<b>48小时清醒（不使用毒品或酒精）</b>。完全免费，帮助戒瘾人群在运动中重建社交连接。<br><br>
+        这类活动把攀岩馆定义成<b>"安全社区空间"</b>而非单纯健身场所，在公益层面获得极大认可度，并带来真实媒体曝光。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.climbterrafirma.com/events-calendar" target="_blank">climbterrafirma.com/events-calendar</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#fbbf24,#60c4fc)"></div>
+      <div class="label-row">
+        <span class="region region-sg">🇸🇬 新加坡</span>
+        <span class="category cat-community">免费物理治疗评估</span>
+      </div>
+      <h3>每月第一周四 — 免费物理治疗评估夜</h3>
+      <div class="gym"><strong>Climba</strong>｜CBD Robinson Road, Singapore</div>
+      <div class="card-body">
+        与物理治疗机构 <b>Limitless</b> 合作，<b>每月第一个周四 7pm</b>，购买当日门票即可享受免费物理评估。<br><br>
+        不只是提供医疗服务，更是一个<b>"因为来看物理治疗顺便认识彼此"</b>的社群聚合点。将健康焦虑转化为正向社交体验。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.climba.sg" target="_blank">climba.sg（活动资讯页）</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== 跨界联名 ==================== -->
+<div class="section" id="collab">
+  <div class="sec-head">
+    <h2>🎵 跨界联名 — 把岩馆变成城市文化地标</h2>
+    <p>当攀岩馆与音乐厂牌、精酿啤酒、艺术、电影联手，它就不再只是"健身房"，而成为都市年轻人的生活场域。</p>
+  </div>
+
+  <div class="grid2">
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#f472b6,#fbbf24)"></div>
+      <div class="label-row">
+        <span class="region region-cn">🇨🇳 中国·北京</span>
+        <span class="category cat-collab">岩馆 × 音乐厂牌</span>
+      </div>
+      <h3>万圣节迪斯科派对 — 岩时攀岩 × 到此一游音乐</h3>
+      <div class="gym"><strong>岩时攀岩管庄店</strong>｜北京</div>
+      <div class="card-body">
+        这是<b>中国首次有规模地由岩馆与音乐厂牌联合打造</b>的大型主题活动。内容包含：<br>
+        • <b>变装舞池</b>（攀岩 + 跳舞双场景）<br>
+        • <b>鬼怪游乐园</b>（万圣节主题装置区）<br>
+        • <b>迷荧光攀岩路线</b>（荧光岩点专设路线）<br>
+        • 精酿啤酒摊位 + 攀岩手工摊位<br><br>
+        结果：预估到店70-80人，实际到店 <b>130-140人（翻倍）</b>，当天卖出啤酒近<b>60升</b>，其中<b>20%的到店者此前对攀岩并不了解</b>，纯粹被活动吸引。
+      </div>
+      <div class="why-box"><strong>💡 数据说明一切：</strong>这次合作验证了"音乐节拍 + 啤酒 + 攀岩"的化学反应，打破了岩馆的圈子边界，引入了完全新的客群。这正是中国岩馆破圈的最佳路径之一。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://m.jiemian.com/article/10407779.html" target="_blank">界面新闻 — 「不想精神内耗的打工人，开始在岩壁上较劲了」</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#34d399,#60c4fc)"></div>
+      <div class="label-row">
+        <span class="region region-cn">🇨🇳 中国·上海</span>
+        <span class="category cat-collab">岩馆 × 夜爬文化</span>
+      </div>
+      <h3>上海攀岩工厂 — 夜爬</h3>
+      <div class="gym"><strong>上海攀岩工厂</strong>｜上海</div>
+      <div class="card-body">
+        「夜爬」是上海攀岩馆近年兴起的社交活动形式：<b>延长夜间营业、配合特别氛围灯光</b>，打造"下班后的都市攀岩派对"。<br><br>
+        结合上海「下班上墙」社交媒体趋势——<b>「下班+攀岩」关键词近一年 UGC 声量激增 114%</b>，夜爬活动天然契合白领下班减压需求，小红书、抖音引流效果显著。
+      </div>
+      <div class="why-box"><strong>💡 中国市场特有背景：</strong>上海一市已有约80家岩馆，岩馆竞争进入白热化，谁能制造"非去不可的社交理由"谁就能突围。夜爬 + 内容化运营 = 流量密码。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://m.jiemian.com/article/10407779.html" target="_blank">界面新闻 — 攀岩行业深度报道</a>
+        <a href="https://blog.csdn.net/datastory1/article/details/149441680" target="_blank">CSDN — 《2024中国攀岩行业发展报告》解读</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#a78bfa,#f472b6)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·多地</span>
+        <span class="category cat-collab">岩馆 × 攀岩电影</span>
+      </div>
+      <h3>Reel Rock 19 攀岩电影巡回放映</h3>
+      <div class="gym"><strong>Boulders Climbing Gym + 全球多家岩馆</strong>｜全球巡回</div>
+      <div class="card-body">
+        <b>Reel Rock</b> 是全球最知名的攀岩纪录片系列，第19届（Reel Rock 19）于2025年3月起全球巡回放映，岩馆作为放映场地，提供爆米花和座位（建议带折叠椅）。<br><br>
+        三部世界首映纪录片涵盖：Cobra Crack 大岩壁、Patagonia Torre Central 18天攀登史诗、5.15级首攀突破。<br><br>
+        这类活动将<b>攀岩知识 + 电影社群 + 馆内社群</b>完美结合，观影后自然引发讨论，极易破冰。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.bouldersgym.com/events" target="_blank">bouldersgym.com/events（Reel Rock 19 放映）</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#fbbf24,#fb923c)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·科罗拉多</span>
+        <span class="category cat-collab">岩馆 × 精酿 × 音乐</span>
+      </div>
+      <h3>Summer Jam + Welcome Back Bash — 免费社区大派对</h3>
+      <div class="gym"><strong>The Spot Climbing Gym</strong>｜Boulder / Golden, Colorado</div>
+      <div class="card-body">
+        The Spot 一年举办数场<b>对全社区开放的免费派对</b>，不需要是会员：<br>
+        • <b>Summer Jam</b>（夏季）：现场音乐 + 障碍课程 + 攀岩<br>
+        • <b>Welcome Back Bash</b>（夏末）：<b>400人</b>挤满全馆，跳舞、赢奖品、喝苹果酒。2025年创下最大规模纪录。<br><br>
+        合作品牌：<b>Liquid Death（气泡水）+ Wilding Brands（精酿饮品）+ Arc'teryx</b>，品牌植入 = 活动质感提升。
+      </div>
+      <div class="why-box"><strong>💡 免费派对策略：</strong>免费降低入场门槛 → 非会员体验馆内氛围 → 爱上这里 → 成为会员。The Spot 把派对当作最高效的拉新工具。</div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.thespotgym.com/events/" target="_blank">thespotgym.com/events</a>
+        <a href="https://www.thespotgym.com/news/" target="_blank">thespotgym.com/news（Welcome Back Bash 400人报道）</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#60c4fc,#a78bfa)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·多地</span>
+        <span class="category cat-collab">岩馆 × DIY手工</span>
+      </div>
+      <h3>Stone Painting Night / Canvas Patch Workshop — 手工社交夜</h3>
+      <div class="gym"><strong>Boulders Gym / Terra Firma</strong>｜Wisconsin / Michigan</div>
+      <div class="card-body">
+        Boulders Gym 的<b>石头彩绘夜</b>：攀岩结束后一起给石头上色，成品留作纪念或送人，配合慈善筹款（建议 $5 捐款）。<br><br>
+        Terra Firma 与 <b>Hot Glue Creux</b> 合作举办<b>帆布补丁刺绣工作坊</b>，边爬岩边学制作专属刺绣补丁。<br><br>
+        这类活动把"动手做"的满足感和社交闲聊叠加，适合情侣、朋友、或想认识新朋友的人。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.bouldersgym.com/events" target="_blank">bouldersgym.com/events（Stone Painting）</a>
+        <a href="https://www.climbterrafirma.com/events-calendar" target="_blank">climbterrafirma.com（Canvas Patch Workshop）</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:linear-gradient(#34d399,#fbbf24)"></div>
+      <div class="label-row">
+        <span class="region region-us">🇺🇸 美国·科罗拉多</span>
+        <span class="category cat-collab">第一个周五 Flow 夜</span>
+      </div>
+      <h3>First Fridays Flow — 每月第一个周五音乐流动夜</h3>
+      <div class="gym"><strong>The Spot Boulder</strong>｜Boulder, Colorado</div>
+      <div class="card-body">
+        每月第一个周五，The Spot Boulder 邀请 DJ（如 Deleto Music）现场打碟，在攀岩区制造<b>"边爬岩边沉浸音乐"</b>的特殊体验。<br><br>
+        是固定的月度社交节点，帮助常客形成<b>"每月第一个周五我要去 The Spot"</b>的习惯性消费。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.facebook.com/thespotgym/" target="_blank">facebook.com/thespotgym（First Fridays Flow 公告）</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== 中国特色 ==================== -->
+<div class="section" id="china">
+  <div class="sec-head">
+    <h2>🇨🇳 中国攀岩馆社交活动生态</h2>
+    <p>中国已有811家攀岩馆（截至2025年1月），增速27.5%，竞争进入白热化。在这背景下，社交活动能力成为岩馆的核心竞争力。</p>
+  </div>
+
+  <div class="quote">
+    <p>「岩馆数量增长了四五倍，但新岩友没涨这么多。我觉得现在开馆，运营能力非常关键。不是说开了就能赚钱，看你怎么玩：有人搞比赛、有人做活动、有人经营社群，也有人啥都不搞，只是每天开门营业，那肯定不行。」</p>
+    <cite>— 新加坡 Fit Bloc 创始人 Leong，网易新闻采访 | c.m.163.com</cite>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card-full">
+    <h3>📊 中国攀岩社交活动现状数据（2024年报告）</h3>
+    <table>
+      <tr><th>指标</th><th>数据</th><th>来源</th></tr>
+      <tr><td>国内攀岩馆数量</td><td>811家（截至2025年1月，同比+27.5%）</td><td>中国攀岩行业发展报告</td></tr>
+      <tr><td>上海一市岩馆数量</td><td>约80家</td><td>界面新闻深度报道</td></tr>
+      <tr><td>「下班+攀岩」社媒声量增幅</td><td>同比激增 114%</td><td>数说故事数据</td></tr>
+      <tr><td>小红书攀岩引流增幅</td><td>同比 +55%</td><td>行业报告</td></tr>
+      <tr><td>抖音攀岩引流增幅</td><td>同比 +53%</td><td>行业报告</td></tr>
+      <tr><td>开展体验式引流的岩馆比例</td><td>76%</td><td>行业报告</td></tr>
+      <tr><td>女性半价之夜/主题活动占比</td><td>上海、北京等一线城市普遍开展</td><td>行业报告</td></tr>
+      <tr><td>小红书攀岩话题总浏览量</td><td>3.2亿次</td><td>界面新闻</td></tr>
+    </table>
+    <div class="source" style="margin-top:12px;">
+      <div class="source-label">📡 数据来源</div>
+      <a href="https://blog.csdn.net/datastory1/article/details/149441680" target="_blank">CSDN — 《2024中国攀岩行业发展报告》解读</a>
+      <a href="https://m.jiemian.com/article/10407779.html" target="_blank">界面新闻 — 攀岩行业深度报道</a>
+    </div>
+  </div>
+
+  <div class="grid2">
+
+    <div class="card">
+      <div class="card-accent" style="background:#fc5c7d"></div>
+      <div class="label-row">
+        <span class="region region-cn">🇨🇳 中国·主流</span>
+        <span class="category cat-social">女性半价夜</span>
+      </div>
+      <h3>「女性半价之夜」+ 「她也能爬」主题活动</h3>
+      <div class="gym"><strong>上海、北京各主流岩馆</strong>｜普遍开展</div>
+      <div class="card-body">
+        上海、北京高线城市岩馆普遍开展的引流活动。部分岩馆女性客群占比在深圳甚至超过<b>60%</b>，女性向活动已从"营销手段"升级为核心运营策略。<br><br>
+        配套内容包括：<b>专属路线颜色标记</b>（更友好的初学者路线）、女性定线员参与设计、拍照角度友好的场景布置等。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://blog.csdn.net/datastory1/article/details/149441680" target="_blank">CSDN — 2024攀岩报告（女性半价之夜数据）</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:#5cfcb8"></div>
+      <div class="label-row">
+        <span class="region region-cn">🇨🇳 中国·全国</span>
+        <span class="category cat-collab">企业团建</span>
+      </div>
+      <h3>企业团建 — 中国岩馆最大商业活动场景</h3>
+      <div class="gym"><strong>全国六成以上岩馆</strong>｜团建业务</div>
+      <div class="card-body">
+        据行业报告，<b>六成以上岩馆组织企业团建活动</b>，这是中国岩馆最主要的B端收入来源。<br><br>
+        团建活动通常包含：<b>攀岩体验课（讲解安全+基础技术）+ 团队挑战关卡（谁先到顶/接力赛）+ 结营颁奖 + 合影</b>。<br><br>
+        高端定制团建可加入：专属路线设置、品牌logo装置、闭馆私享等元素。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://blog.csdn.net/datastory1/article/details/149441680" target="_blank">CSDN — 《2024中国攀岩行业发展报告》</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:#fcb75c"></div>
+      <div class="label-row">
+        <span class="region region-cn">🇨🇳 中国·新兴</span>
+        <span class="category cat-social">打卡社交化</span>
+      </div>
+      <h3>小红书 / 抖音「打卡式消费」运营</h3>
+      <div class="gym"><strong>全国各岩馆</strong>｜社媒运营</div>
+      <div class="card-body">
+        <b>#攀岩初体验</b> 等话题带动的"打卡式消费"热潮，是中国岩馆特有的社交活动运营模式。<br><br>
+        具体做法：<b>设计馆内"出片点"</b>（特定角度的彩色岩壁、Logo墙、打卡牌）、鼓励用户发小红书换取优惠券、定期发起"晒送挑战"话题。<br><br>
+        微信生态（朋友圈+公众号）以<b>71%占比</b>成为主要获客渠道，超越美团点评。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://blog.csdn.net/datastory1/article/details/149441680" target="_blank">CSDN — 2024攀岩报告（流量获取数据）</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent" style="background:#7c5cfc"></div>
+      <div class="label-row">
+        <span class="region region-cn">🇨🇳 中国·全国</span>
+        <span class="category cat-league">城市业余攀岩联赛</span>
+      </div>
+      <h3>城市业余攀岩联赛 / 上海城市业余联赛攀岩项目</h3>
+      <div class="gym"><strong>上海市徐汇区等各地</strong>｜官方主办</div>
+      <div class="card-body">
+        上海市徐汇区2025年Q2赛事日历已包含<b>攀岩项目</b>，纳入全区24项体育赛事之一，代表攀岩已进入中国城市正式运动体系。<br><br>
+        这类官方联赛为业余玩家提供了<b>公开竞技平台</b>，同时让岩馆成为城市运动基础设施，社会认可度大幅提升。
+      </div>
+      <div class="source">
+        <div class="source-label">📡 来源</div>
+        <a href="https://www.shanghai.gov.cn/nw17239/20250328/d36df2b9ffc1464b9c5714e50df96f71.html" target="_blank">上海市政府官网 — 徐汇区2025年Q2体育赛事日历</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== 趋势洞察 ==================== -->
+<div class="section" id="insight">
+  <div class="sec-head">
+    <h2>💡 全球趋势洞察 — 攀岩馆社交活动的设计逻辑</h2>
+    <p>综合中国、美国、新加坡各地最优秀活动案例，提炼出六大核心设计规律。</p>
+  </div>
+
+  <div class="insight-grid">
+    <div class="insight">
+      <div class="insight-icon">🎭</div>
+      <h4>主题 = 破冰道具</h4>
+      <p>服装主题、荧光环境、万圣节等场景，让陌生人有了天然对话入口。最好的社交活动不需要你主动"搭讪"，主题本身就是话题。</p>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">🤝</div>
+      <h4>Free Agent 机制 — 化解独行侠困境</h4>
+      <p>单人报名 → 馆方帮你组队。最消耗社交意愿的是"我没有朋友一起去"，直接解决这个问题就能打开最大的潜在客群。</p>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">📅</div>
+      <h4>固定节律 = 习惯养成</h4>
+      <p>"每月第一个周四""每月最后一个周二"……固定时间节点让常客形成"这天我去岩馆"的条件反射，比临时活动的粘性高出数倍。</p>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">🆓</div>
+      <h4>免费入口 = 最高效拉新</h4>
+      <p>The Spot 的免费大派对把数百位非会员带进门，体验后转化为会员。短期放弃收入 = 长期获得用户。</p>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">🎵</div>
+      <h4>跨界 = 破圈</h4>
+      <p>北京岩时 × 音乐厂牌的案例证明：跨界联名能把完全不了解攀岩的人带进门（20%新客纯因活动而来）。岩馆 + 音乐/精酿/艺术/电影 = 城市文化事件。</p>
+    </div>
+    <div class="insight">
+      <div class="insight-icon">📐</div>
+      <h4>残障点数 = 公平参与感</h4>
+      <p>让V2选手能赢过V8选手的积分系统，彻底消除水平焦虑。当任何人都有机会"赢"时，参与门槛消失，社群扩容速度加快。</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card-full">
+    <h3>🗺️ 活动类型 × 社交效果 × 适合地区 综合对照表</h3>
+    <table>
+      <tr>
+        <th>活动类型</th>
+        <th>代表案例</th>
+        <th>社交密度</th>
+        <th>破圈能力</th>
+        <th>最适合地区</th>
+      </tr>
+      <tr>
+        <td>荧光/黑光主题赛</td>
+        <td>Psychedelia / BLB</td>
+        <td>⭐⭐⭐⭐⭐</td>
+        <td>⭐⭐⭐⭐⭐</td>
+        <td>全球通用</td>
+      </tr>
+      <tr>
+        <td>岩馆 × 音乐厂牌派对</td>
+        <td>岩时万圣节迪斯科</td>
+        <td>⭐⭐⭐⭐⭐</td>
+        <td>⭐⭐⭐⭐⭐</td>
+        <td>🇨🇳中国特别有效</td>
+      </tr>
+      <tr>
+        <td>团队抱石联赛</td>
+        <td>Sender One / Edgeworks</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>⭐⭐⭐</td>
+        <td>全球通用</td>
+      </tr>
+      <tr>
+        <td>跨馆积分系列赛</td>
+        <td>SEA Boulder League / Nor'Easter</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>🇸🇬东南亚</td>
+      </tr>
+      <tr>
+        <td>专属社群夜（LGBTQ+/女性等）</td>
+        <td>Queer Crush / Ladies Night</td>
+        <td>⭐⭐⭐⭐⭐</td>
+        <td>⭐⭐⭐</td>
+        <td>🇺🇸北美成熟</td>
+      </tr>
+      <tr>
+        <td>免费大派对</td>
+        <td>Summer Jam / Welcome Back Bash</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>⭐⭐⭐⭐⭐</td>
+        <td>全球通用</td>
+      </tr>
+      <tr>
+        <td>万圣节服装赛</td>
+        <td>Creep Comp</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>全球通用</td>
+      </tr>
+      <tr>
+        <td>头灯夜攀 + 美食</td>
+        <td>Headlamp Night + Chili Cook-Off</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>⭐⭐⭐</td>
+        <td>全球通用</td>
+      </tr>
+      <tr>
+        <td>电影放映夜</td>
+        <td>Reel Rock 19</td>
+        <td>⭐⭐⭐</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>全球通用</td>
+      </tr>
+      <tr>
+        <td>手工艺工作坊</td>
+        <td>石头彩绘 / 刺绣补丁</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>⭐⭐⭐</td>
+        <td>全球通用</td>
+      </tr>
+      <tr>
+        <td>打卡式消费 + 小红书运营</td>
+        <td>上海各馆</td>
+        <td>⭐⭐⭐</td>
+        <td>⭐⭐⭐⭐⭐</td>
+        <td>🇨🇳中国独有</td>
+      </tr>
+      <tr>
+        <td>企业团建</td>
+        <td>全国各馆</td>
+        <td>⭐⭐⭐</td>
+        <td>⭐⭐⭐⭐</td>
+        <td>🇨🇳中国最强</td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+</div>
+
+<div class="back-top">整合于 2026年4月 · 所有来源均可点击核实 · 数据来自岩馆官网、社交媒体、行业报告</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
